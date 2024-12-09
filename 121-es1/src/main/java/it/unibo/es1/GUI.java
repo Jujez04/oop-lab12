@@ -23,7 +23,6 @@ public class GUI extends JFrame {
 	 * are indacated by the parameter.
 	 * @param size the number of buttons
 	 */
-	@SuppressWarnings("unused")
 	public GUI(final int size) {
 		final Logics logics = new LogicsImpl(size);
 		this.setSize(WIDTH, HEIGHT);

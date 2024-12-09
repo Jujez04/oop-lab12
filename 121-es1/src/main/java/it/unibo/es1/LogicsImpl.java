@@ -3,16 +3,14 @@ package it.unibo.es1;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.ArrayList;
+import java.util.Collections;
 
 public class LogicsImpl implements Logics {
 
 	private final List<Integer> list;
 
-	public LogicsImpl(int size) {
-		this.list = new ArrayList<>();
-		for(int i = 0; i < size; i++) {
-			this.list.add(0);
-		}
+	public LogicsImpl(final int size) {
+		this.list = new ArrayList<>(Collections.nCopies(size, 0));
 	}
 
 	@Override
@@ -22,20 +20,20 @@ public class LogicsImpl implements Logics {
 
 	@Override
 	public List<Integer> values() {
-		return List.copyOf(this.list);
+		return Collections.unmodifiableList(this.list);
 	}
 
 	@Override
 	public List<Boolean> enablings() {
 		return this.list.stream()
 			.map(i -> i < this.list.size())
-			.collect(Collectors.toList());
+			.toList();
 	}
 
 	@Override
-	public int hit(int elem) {
-		int n = this.list.get(elem);
-		this.list.set(elem, ++n);
+	public int hit(final int elem) {
+		final int n = this.list.get(elem) + 1;
+		this.list.set(elem, n);
 		return n;
 	}
 
@@ -43,12 +41,12 @@ public class LogicsImpl implements Logics {
 	public String result() {
 		return this.list.stream()
 			.map(i -> i.toString())
-		.collect(Collectors.joining("|", "<<" , ">>"));
+			.collect(Collectors.joining("|", "<<" , ">>"));
 	}
 
 	@Override
 	public boolean toQuit() {
 		return this.list.stream()
-			.allMatch(i -> i.equals(this.list.size()));
+			.allMatch(i -> i.equals(this.list.get(0)));
 	}
 }

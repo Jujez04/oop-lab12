@@ -1,6 +1,7 @@
 package it.unibo.es2;
 
 import javax.swing.*;
+
 import java.util.*;
 import java.awt.*;
 import java.awt.event.ActionListener;
@@ -8,10 +9,10 @@ import java.awt.event.ActionListener;
 public class GUI extends JFrame {
     
     private final Map<JButton, Pair<Integer, Integer>> buttons = new HashMap<>();
-    //private final Logics logics;
+    private final Logics logics;
     
     public GUI(int size) {
-        //this.logics = new LogicsImpl(size);
+        this.logics = new LogicsImpl(size);
         this.setDefaultCloseOperation(EXIT_ON_CLOSE);
         this.setSize(100*size, 100*size);
         
@@ -21,14 +22,14 @@ public class GUI extends JFrame {
         ActionListener al = (e)->{
             final JButton buttonClicked = (JButton)e.getSource();
             final Pair<Integer,Integer> buttonPosition = buttons.get(buttonClicked);
-            buttonClicked.setText(buttonPosition.toString()); // here call the logic to know what to show!
-            if (buttonPosition.equals(new Pair<>(0,0))){ // here call the logic instead, to know if should exit!
+            buttonClicked.setText(String.valueOf(logics.hit(buttonPosition)));
+            if (logics.toQuit()){
                 System.exit(1);
             } 
         };
                 
-        for (int i=0; i<size; i++){
-            for (int j=0; j<size; j++){
+        for (int i=0; i < size; i++){
+            for (int j=0; j < size; j++){
                 final JButton jb = new JButton(" ");
                 jb.addActionListener(al);
                 this.buttons.put(jb,new Pair<>(i,j));
