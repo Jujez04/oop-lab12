@@ -1,37 +1,40 @@
 package it.unibo.es2;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.stream.Stream;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.stream.IntStream;
 
 public class LogicsImpl implements Logics {
 
-    private final Map<Pair<Integer,Integer>, String> map;
+    private final List<List<String>> mat;
 
     public LogicsImpl(final int size) {
-        this.map = new HashMap<>();
-        for(int i = 0; i < size; i++) {
-            for(int j = 0; j < size; j++) {
-                this.map.put(new Pair<Integer,Integer>(i, j), " ");
-            }
+        this.mat = new ArrayList<>();
+        for (int i = 0; i < size; i++) {
+            this.mat.add(new ArrayList<>(Collections.nCopies(size, " ")));
         }
     }
 
     @Override
     public String hit(Pair<Integer, Integer> elem) {
-        final String str = this.map.get(elem).equals("*") ? " " : "*";
-        this.map.put(elem, str);
+        final String str = this.mat.get(elem.getY()).get(elem.getX()).equals("*") ? " " : "*";
+        this.mat.get(elem.getY()).set(elem.getX(), str);
         return str;
     }
 
     @Override
     public boolean toQuit() {
-        return getStreamValue(this.map)
-            .allMatch(s -> s.equals("*"));
+        return toQuitRow() || toQuitCol();
     }
 
-    private static <E, O> Stream<O> getStreamValue(Map<Pair<E, E>, O> mapIn) {
-        return mapIn.entrySet().stream()
-            .map(e -> e.getValue());
+    private boolean toQuitRow() {
+        return IntStream.range(0, this.mat.size())
+            .anyMatch(i -> IntStream.range(0, this.mat.size())
+            .allMatch(j -> this.mat.get(j).get(i).equals("*")));
+    }
+
+    private boolean toQuitCol() {
+        return this.mat.stream().anyMatch(l -> l.stream().allMatch(s -> s.equals("*")));
     }
 }
