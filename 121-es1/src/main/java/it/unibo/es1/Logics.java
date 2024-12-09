@@ -1,9 +1,11 @@
 package it.unibo.es1;
 
-import java.util.*;
+import java.util.List;
 
+/**
+ * An interface that defines the behaviour of buttons created.
+ */
 public interface Logics {
-	
 	/**
 	 * @return the number of buttons (except Print)
 	 */
@@ -20,6 +22,7 @@ public interface Logics {
 	List<Boolean> enablings();
 	
 	/**
+	 * @param elem
 	 * @return the new value a button should show after being pressed
 	 */
 	int hit(int elem);
