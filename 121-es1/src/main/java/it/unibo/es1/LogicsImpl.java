@@ -9,7 +9,10 @@ public class LogicsImpl implements Logics {
 	private final List<Integer> list;
 
 	public LogicsImpl(int size) {
-		this.list = new ArrayList<>(size);	
+		this.list = new ArrayList<>();
+		for(int i = 0; i < size; i++) {
+			this.list.add(0);
+		}
 	}
 
 	@Override
@@ -40,7 +43,7 @@ public class LogicsImpl implements Logics {
 	public String result() {
 		return this.list.stream()
 			.map(i -> i.toString())
-			.reduce("", (a, b) -> a.concat("|" + b));
+		.collect(Collectors.joining("|", "<<" , ">>"));
 	}
 
 	@Override
